@@ -39,60 +39,68 @@ class _LoginState extends State<Login> {
       body: Container(
         child: Padding(
           padding: EdgeInsets.only(top: 38, bottom: 38),
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(8),
-            child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      "Informe seu CNPJ e obtenha os dados da sua empresa",
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(8),
+                    child: Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              "Informe seu CNPJ e obtenha os dados da sua empresa",
+                              style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8),
+                              child:
+                              TextField(
+                                style: TextStyle(
+                                    color: Colors.white
+                                ),
+                                decoration: InputDecoration(
+                                  labelText: "00.000.000/000-11",
+                                ),
+                                cursorColor: Colors.white,
+                                keyboardType: TextInputType.number,
+                                maxLength: 14,
+                                maxLengthEnforced: true,
+                                controller: _tfController,
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  ),
+                ),
+              Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: SizedBox(
+                  width: 288,
+                  height: 48,
+                  child: RaisedButton(
+                    child: Text(
+                      "Consultar",
                       style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                           color: Colors.white
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child:
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: "00.000.000/000-11",
-                        ),
-                        cursorColor: Colors.white,
-                        keyboardType: TextInputType.number,
-                        maxLength: 14,
-                        maxLengthEnforced: true,
-                        controller: _tfController,
-                      ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(48/2),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 16),
-                      child: SizedBox(
-                        width: 288,
-                        height: 48,
-                        child: RaisedButton(
-                          child: Text(
-                            "Consultar",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white
-                            ),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(48/2),
-                          ),
-                          color: HexColor(AppColor.primaryColor),
-                          onPressed: _buttonPressent,
-                        ),
-                      ),
-                    ),
-
-                  ],
-                )
-            ),
-          ),
+                    color: HexColor(AppColor.primaryColor),
+                    onPressed: _buttonPressent,
+                  ),
+                ),
+              ),
+            ],
+          )
         )
       ),
     );
