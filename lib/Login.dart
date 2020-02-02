@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:minhaempresa/EnterpriseView.dart';
+import 'package:minhaempresa/Service/WebService.dart';
 import 'Components/AppColor.dart';
+import 'Model/Enterprise.dart';
 
 class Login extends StatefulWidget {
+
   @override
   _LoginState createState() => _LoginState();
 }
-
-typedef VoidNavigate = void  Function();
 
 class _LoginState extends State<Login> {
 
   TextEditingController _tfController = TextEditingController();
 
+  Future <Enterprise> enterprise;
   String _buttonText = "Pressione";
 
-  void _buttonPressent() {
-    setState(() {
-      print(_tfController.text.toString());
+  @override
+  void initState() {
+    super.initState();
+  }
 
+  void _buttonPressent() {
+    enterprise = WebService().fetchEntepriseData(_tfController.text.toString());
+
+    enterprise.then((value) => {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) => EnterpriseView(value)
+      ))
     });
   }
 
@@ -73,12 +84,11 @@ class _LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(48/2),
                           ),
                           color: HexColor(AppColor.primaryColor),
-                          onPressed: () {
-                            this._buttonPressent();
-                          },
+                          onPressed: _buttonPressent,
                         ),
                       ),
-                    )
+                    ),
+
                   ],
                 )
             ),
