@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:minhaempresa/Components/EnterpriseSegments.dart';
+import 'package:minhaempresa/Service/EnterpriseViewModel.dart';
 import 'Components/AppColor.dart';
 import 'Components/SubEnterpriseSegments.dart';
 import 'Model/Enterprise.dart';
 
 class EnterpriseView extends StatefulWidget {
 
-  Enterprise enterprise;
+  EnterpriseViewModel viewModel;
 
-  EnterpriseView(this.enterprise);
-
-  String prepareDescription() {
-    if (enterprise.mainActivity.first.title != null) {
-      var code = enterprise.mainActivity.first.code;
-      var title = enterprise.mainActivity.first.title;
-      var text = 'Código: $code \nDescrição: $title';
-      return text;
-    } else { return ""; }
-  }
+  EnterpriseView(this.viewModel);
 
   @override
   _EnterpriseViewState createState() => _EnterpriseViewState();
@@ -28,7 +20,7 @@ class _EnterpriseViewState extends State<EnterpriseView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.enterprise.nickName),
+        title: Text(widget.viewModel.enterprise.nickName),
       ),
       backgroundColor: HexColor(AppColor.primaryColorLight),
       body: Padding(
@@ -38,27 +30,27 @@ class _EnterpriseViewState extends State<EnterpriseView> {
               children: <Widget>[
                 EnterpriseSegments(
                     "Nome",
-                    widget.enterprise.name != null ? widget.enterprise.name : "Nome"
+                    widget.viewModel.enterprise.name != null ? widget.viewModel.enterprise.name : "Nome"
                 ),
                 Padding(padding: EdgeInsets.only(top: 16)),
                 EnterpriseSegments(
                     "CNPJ",
-                    widget.enterprise.cnpj != null ? widget.enterprise.cnpj : "CNPJ"
+                    widget.viewModel.enterprise.cnpj != null ? widget.viewModel.enterprise.cnpj : "CNPJ"
                 ),
                 Padding(padding: EdgeInsets.only(top: 16)),
                 SubEnterpriseSegments(
                     "Data de fundação",
-                    widget.enterprise.fondationDate != null ? widget.enterprise.fondationDate : "01/01/2000"
+                    widget.viewModel.enterprise.fondationDate != null ? widget.viewModel.enterprise.fondationDate : "01/01/2000"
                 ),
                 Padding(padding: EdgeInsets.only(top: 16)),
                 SubEnterpriseSegments(
                     "Tipo",
-                    widget.enterprise.type != null ? widget.enterprise.type : ""
+                    widget.viewModel.enterprise.type != null ? widget.viewModel.enterprise.type : ""
                 ),
                 Padding(padding: EdgeInsets.only(top: 16)),
                 SubEnterpriseSegments(
                     "Atividade Principal",
-                    widget.prepareDescription()
+                    widget.viewModel.prepareDescription()
                 ),
               ],
             ),

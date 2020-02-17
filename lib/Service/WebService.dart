@@ -6,8 +6,10 @@ import 'package:minhaempresa/Model/Enterprise.dart';
 
 class WebService {
 
+  static const baseUrl = 'https://www.receitaws.com.br/v1/cnpj/';
+
   Future<Enterprise> fetchEntepriseData(String cnpj) async {
-    final response = await http.get('https://www.receitaws.com.br/v1/cnpj/$cnpj');
+    final response = await http.get('$baseUrl'+'$cnpj');
 
     print(response.body);
     if (response.statusCode == 200) {

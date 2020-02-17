@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:minhaempresa/EnterpriseView.dart';
+import 'package:minhaempresa/Service/EnterpriseViewModel.dart';
 import 'package:minhaempresa/Service/WebService.dart';
 import 'Components/AppColor.dart';
 import 'Model/Enterprise.dart';
@@ -13,6 +14,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
 
   TextEditingController _tfController = TextEditingController();
+  EnterpriseViewModel viewModel = EnterpriseViewModel();
 
   Future <Enterprise> enterprise;
   String _buttonText = "Pressione";
@@ -23,13 +25,42 @@ class _LoginState extends State<Login> {
   }
 
   void _buttonPressent() {
-    enterprise = WebService().fetchEntepriseData(_tfController.text.toString());
+    viewModel.fetchEnterprise(_tfController.text.toString());
 
-    enterprise.then((value) => {
-      Navigator.push(context, MaterialPageRoute(
-        builder: (context) => EnterpriseView(value)
-      ))
+
+    viewModel.enterpriseFuture.then((value) => {
+      viewModel.enterprise = value,
+
+//      Navigator.push(context, MaterialPageRoute(builder: (context) => EnterpriseView(viewModel)))
+    this.showAlertDialog1(context),
     });
+  }
+
+
+  showAlertDialog1(BuildContext context)
+  {
+    // configura o button
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    // configura o  AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Ah não"),
+      content: Text("Parece que houve algum problema, tente novamente."),
+      actions: [
+        okButton,
+      ],
+    );
+    // exibe o dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
