@@ -16,4 +16,5 @@ class AppColor {
 
   static const primaryColor = "#000028";
   static const primaryColorLight = "#323252";
+  static const primary = "#322370";
 }

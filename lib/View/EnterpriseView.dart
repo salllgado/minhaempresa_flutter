@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:minhaempresa/Components/EnterpriseSegments.dart';
-import 'package:minhaempresa/Service/EnterpriseViewModel.dart';
-import 'Components/AppColor.dart';
-import 'Components/SubEnterpriseSegments.dart';
-import 'Model/Enterprise.dart';
+import 'package:minhaempresa/ViewModel/EnterpriseViewModel.dart';
+import '../Components/AppColor.dart';
+import '../Components/SubEnterpriseSegments.dart';
+import '../Model/Enterprise.dart';
 
 class EnterpriseView extends StatefulWidget {
 
@@ -16,11 +16,37 @@ class EnterpriseView extends StatefulWidget {
 }
 
 class _EnterpriseViewState extends State<EnterpriseView> {
+
+  var icon = Icon(Icons.star_border);
+
+  @override
+  void initState() {
+    super.initState();
+
+    icon = widget.viewModel.iconForThisEnterprise;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.viewModel.enterprise.nickName),
+        actions: <Widget>[
+          IconButton(
+              icon: icon,
+              onPressed:() {
+                widget.viewModel.handlerEnterpriseInPreference();
+
+                setState(() {
+                  if (icon.icon == Icons.star) {
+                    icon = Icon(Icons.star_border);
+                  } else {
+                    icon = Icon(Icons.star);
+                  }
+                });
+              },
+          )
+        ],
       ),
       backgroundColor: HexColor(AppColor.primaryColorLight),
       body: Padding(

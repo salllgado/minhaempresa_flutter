@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:minhaempresa/EnterpriseView.dart';
-import 'package:minhaempresa/Service/EnterpriseViewModel.dart';
+import 'package:minhaempresa/View/EnterpriseView.dart';
+import 'package:minhaempresa/ViewModel/EnterpriseViewModel.dart';
 import 'package:minhaempresa/Service/WebService.dart';
-import 'Components/AppColor.dart';
-import 'Model/Enterprise.dart';
+import '../Components/AppColor.dart';
+import '../Model/Enterprise.dart';
 
 class Login extends StatefulWidget {
 
@@ -30,12 +30,14 @@ class _LoginState extends State<Login> {
 
     viewModel.enterpriseFuture.then((value) => {
       viewModel.enterprise = value,
-
-//      Navigator.push(context, MaterialPageRoute(builder: (context) => EnterpriseView(viewModel)))
-    this.showAlertDialog1(context),
+      viewModel.handlerFavoriteIcon(),
+      Navigator.push(context, MaterialPageRoute(builder: (context) => EnterpriseView(viewModel)))
     });
   }
 
+  void _buttonFavoriteAction() {
+
+  }
 
   showAlertDialog1(BuildContext context)
   {
@@ -61,6 +63,35 @@ class _LoginState extends State<Login> {
         return alert;
       },
     );
+  }
+
+  Widget handlerFavoritebutton() {
+    var value = true;
+    if (value) {
+      return Padding(
+        padding: EdgeInsets.only(top: 16),
+        child: SizedBox(
+          width: 288,
+          height: 48,
+          child: RaisedButton(
+            child: Text(
+              "Favoritos",
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(48/2),
+            ),
+            color: HexColor(AppColor.primary),
+            onPressed: _buttonFavoriteAction,
+          ),
+        ),
+      );
+    } else {
+      return Padding(padding: EdgeInsets.all(1));
+    }
   }
 
   @override
@@ -109,6 +140,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
+              handlerFavoritebutton(),
               Padding(
                 padding: EdgeInsets.only(top: 16),
                 child: SizedBox(
