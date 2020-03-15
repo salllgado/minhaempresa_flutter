@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:minhaempresa/View/EnterpriseView.dart';
+import 'package:minhaempresa/View/PreferedList.dart';
 import 'package:minhaempresa/ViewModel/EnterpriseViewModel.dart';
 import 'package:minhaempresa/Service/WebService.dart';
 import '../Components/AppColor.dart';
@@ -36,7 +37,7 @@ class _LoginState extends State<Login> {
   }
 
   void _buttonFavoriteAction() {
-
+    Navigator.push(context, MaterialPageRoute(builder: (context) => PreferedList()));
   }
 
   showAlertDialog1(BuildContext context)
