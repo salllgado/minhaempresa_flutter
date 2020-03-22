@@ -6,8 +6,6 @@ import 'dart:async';
 
 class EnterpriseWorker {
 
-  final tableName = "enterprise";
-
   Future<Enterprise> fetchEnterprise(String cnpj) async {
     // handler if contains file with cnpj else create one from webservice response.
     return WebService().fetchEntepriseData(cnpj);
@@ -30,6 +28,7 @@ class EnterpriseWorker {
 
   void saveDataInDatabase(Enterprise enterprise) async {
 
+    final tableName = "enterprise";
     Database db = await getDataFromDatabase();
 
     Map<String, dynamic> values = {
