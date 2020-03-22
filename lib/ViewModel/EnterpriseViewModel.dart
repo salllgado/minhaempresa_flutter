@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:minhaempresa/Model/Enterprise.dart';
 import 'package:minhaempresa/Service/PreferencesService.dart';
-import '../Service/WebService.dart';
+import 'package:minhaempresa/Worker/EnterpriseWorker.dart';
 
 class EnterpriseViewModel {
 
@@ -10,18 +10,24 @@ class EnterpriseViewModel {
   Future <Enterprise> enterpriseFuture;
   Icon iconForThisEnterprise;
 
+  void initDatabase() {
+    EnterpriseWorker().getDataFromDatabase();
+  }
+
   String prepareDescription() {
-    if (enterprise.mainActivity.first.title != null) {
-      var code = enterprise.mainActivity.first.code;
-      var title = enterprise.mainActivity.first.title;
-      var text = 'Código: $code \nDescrição: $title';
-      return text;
-    } else { return ""; }
+//    if (enterprise.mainActivity.first.title != null) {
+//      var code = enterprise.mainActivity.first.code;
+//      var title = enterprise.mainActivity.first.title;
+//      var text = 'Código: $code \nDescrição: $title';
+//      return text;
+//    } else { return ""; }
+  return "";
   }
 
   // fetch data
   void fetchEnterprise(String cnpj) {
-    enterpriseFuture = WebService().fetchEntepriseData(cnpj);
+    // verifica se tem dado salvo no banco se não tiver faz o request
+    enterpriseFuture = EnterpriseWorker().fetchDataFromDatabase(cnpj);
   }
 
   void handlerEnterpriseInPreference() {
@@ -53,5 +59,10 @@ class EnterpriseViewModel {
     userPreferedEnterprises.then((value) => {
       this.iconForThisEnterprise = value.contains(this.enterprise.cnpj) ? Icon(Icons.star) : Icon(Icons.star_border),
     });
+  }
+
+  // --- database entryPoints
+  void saveDataOnDatabase(Enterprise enteprise) {
+    EnterpriseWorker().saveDataInDatabase(enteprise);
   }
 }

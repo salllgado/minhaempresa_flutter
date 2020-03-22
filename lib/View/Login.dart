@@ -23,6 +23,8 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
+
+    viewModel.initDatabase();
   }
 
   void _buttonPressent() {
@@ -31,6 +33,7 @@ class _LoginState extends State<Login> {
 
     viewModel.enterpriseFuture.then((value) => {
       viewModel.enterprise = value,
+      viewModel.saveDataOnDatabase(value),
       viewModel.handlerFavoriteIcon(),
       Navigator.push(context, MaterialPageRoute(builder: (context) => EnterpriseView(viewModel)))
     });
@@ -40,8 +43,7 @@ class _LoginState extends State<Login> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => PreferedList()));
   }
 
-  showAlertDialog1(BuildContext context)
-  {
+  showAlertDialog1(BuildContext context) {
     // configura o button
     Widget okButton = FlatButton(
       child: Text("OK"),
@@ -67,8 +69,8 @@ class _LoginState extends State<Login> {
   }
 
   Widget handlerFavoritebutton() {
-    var value = true;
-    if (value) {
+    var enable = false;
+    if (enable) {
       return Padding(
         padding: EdgeInsets.only(top: 16),
         child: SizedBox(
