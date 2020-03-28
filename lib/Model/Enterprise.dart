@@ -6,6 +6,7 @@ class Enterprise {
   final String type;
   final String port;
   final String nature;
+  final String porte;
 //  final List<Activity> mainActivity;
 
   Enterprise({
@@ -16,6 +17,7 @@ class Enterprise {
     this.type,
     this.port,
     this.nature,
+    this.porte,
 //    this.mainActivity
   });
 
@@ -31,6 +33,7 @@ class Enterprise {
         type: json['tipo'],
         port: json['porte'],
         nature: json['natureza_juridica'],
+        porte: json['porte']
 //        mainActivity: _activityJson
     );
   }

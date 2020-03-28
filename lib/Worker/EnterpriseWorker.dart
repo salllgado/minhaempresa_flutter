@@ -19,7 +19,7 @@ class EnterpriseWorker {
       completePath,
       version: 1,
       onCreate: (db, dbNewestVersion) {
-        String query = "CREATE TABLE enterprise (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, cnpj VARCHAR, nickName VARCHAR, fondationDate VARCHAR, type VARCHAR, port VARCHAR, nature VARCHAR)";
+        String query = "CREATE TABLE enterprise (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, cnpj VARCHAR, nickName VARCHAR, fondationDate VARCHAR, type VARCHAR, port VARCHAR, nature VARCHAR, porte VARCHAR)";
           db.execute(query);
       });
 
@@ -46,22 +46,28 @@ class EnterpriseWorker {
 
   Future<Enterprise> fetchDataFromDatabase(String cnpj) async {
     Database db = await getDataFromDatabase();
-    String query = "SELECT * FROM enterprise";
+    var newCNPJ = cnpj.replaceAll(new RegExp(r'[^\w\s]+'),'');
+    String query = "SELECT * FROM enterprise WHERE cnpj = $newCNPJ";
     List itens = await db.rawQuery(query);
-    var iten = itens.first;
+    if (itens.isEmpty == false) {
+      var iten = itens.first;
 
-   if (iten == null) {
-        fetchEnterprise(cnpj);
-   } else {
-     return Enterprise(
-         name: iten["name"],
-         cnpj: iten["cnpj"],
-         nickName: iten["nickName"],
-         fondationDate: iten["fondationDate"],
-         type: iten["type"],
-         port: iten["port"],
-         nature: iten["nature"]
-     );
-   }
+      if (iten == null) {
+            return fetchEnterprise(newCNPJ);
+      } else {
+        return Enterprise(
+            name: iten["name"],
+            cnpj: iten["cnpj"],
+            nickName: iten["nickName"],
+            fondationDate: iten["fondationDate"],
+            type: iten["type"],
+            port: iten["port"],
+            nature: iten["nature"],
+            porte: iten["porte"]
+        );
+      }
+    } else {
+      return fetchEnterprise(newCNPJ);
+    }  
   }
 }
