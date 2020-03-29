@@ -15,7 +15,7 @@ class WebService {
     if (response.statusCode == 200) {
       return Enterprise.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to fetch data');
+      // handler request error here
     }
   }
 }

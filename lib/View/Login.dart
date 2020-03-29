@@ -35,11 +35,13 @@ class _LoginState extends State<Login> {
         viewModel.fetchEnterprise(value.first),
 
         viewModel.enterpriseFuture.then((value) => {
-          if (value != null) { 
+          if (value != null && value.cnpj != null)  { 
             viewModel.enterprise = value,
             viewModel.saveDataOnDatabase(value),
             viewModel.handlerFavoriteIcon(),
             Navigator.push(context, MaterialPageRoute(builder: (context) => EnterpriseView(viewModel)))
+          } else {
+            showAlertDialog1(context)
           }
         }),
       }
@@ -49,11 +51,13 @@ class _LoginState extends State<Login> {
   void _buttonPressent() {
     viewModel.fetchEnterprise(_tfController.text.toString());
     viewModel.enterpriseFuture.then((value) => {
-      if (value != null) {  
+      if (value != null && value.cnpj != null)  {  
         viewModel.enterprise = value,
         viewModel.saveDataOnDatabase(value),
         viewModel.handlerFavoriteIcon(),
         Navigator.push(context, MaterialPageRoute(builder: (context) => EnterpriseView(viewModel)))
+      } else {
+        showAlertDialog1(context)
       }
     });
   }
@@ -72,8 +76,8 @@ class _LoginState extends State<Login> {
     );
     // configura o  AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Ah não"),
-      content: Text("Parece que houve algum problema, tente novamente."),
+      title: Text("Ops"),
+      content: Text("Parece que houve algum problema, confira o cnpj inserido e tente novamente em alguns segundos."),
       actions: [
         okButton,
       ],
@@ -175,7 +179,7 @@ class _LoginState extends State<Login> {
                                         color: Colors.white
                                     ),
                                     decoration: InputDecoration(
-                                      labelText: "00.000.000/000-11",
+                                      labelText: "00.000.000/0001-10",
                                     ),
                                     cursorColor: Colors.white,
                                     keyboardType: TextInputType.number,
