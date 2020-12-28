@@ -5,6 +5,7 @@ import 'package:minhaempresa/Model/Enterprise.dart';
 import 'dart:async';
 
 class EnterpriseWorker {
+  final tableName = "enterprise";
 
   Future<Enterprise> fetchEnterprise(String cnpj) async {
     // handler if contains file with cnpj else create one from webservice response.
@@ -14,21 +15,18 @@ class EnterpriseWorker {
   getDataFromDatabase() async {
     final pathToDB = await getDatabasesPath();
     final completePath = join(pathToDB, "banco.db");
-    
-    var db = await openDatabase(
-      completePath,
-      version: 1,
-      onCreate: (db, dbNewestVersion) {
-        String query = "CREATE TABLE enterprise (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, cnpj VARCHAR, nickName VARCHAR, fondationDate VARCHAR, type VARCHAR, port VARCHAR, nature VARCHAR, porte VARCHAR)";
-          db.execute(query);
-      });
+
+    var db = await openDatabase(completePath, version: 1,
+        onCreate: (db, dbNewestVersion) {
+      String query =
+          "CREATE TABLE enterprise (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, cnpj VARCHAR, nickName VARCHAR, fondationDate VARCHAR, type VARCHAR, port VARCHAR, nature VARCHAR, porte VARCHAR)";
+      db.execute(query);
+    });
 
     return db;
   }
 
   void saveDataInDatabase(Enterprise enterprise) async {
-
-    final tableName = "enterprise";
     Database db = await getDataFromDatabase();
 
     Map<String, dynamic> values = {
@@ -46,14 +44,14 @@ class EnterpriseWorker {
 
   Future<Enterprise> fetchDataFromDatabase(String cnpj) async {
     Database db = await getDataFromDatabase();
-    var newCNPJ = cnpj.replaceAll(new RegExp(r'[^\w\s]+'),'');
+    var newCNPJ = cnpj.replaceAll(new RegExp(r'[^\w\s]+'), '');
     String query = "SELECT * FROM enterprise WHERE cnpj = $newCNPJ";
     List itens = await db.rawQuery(query);
     if (itens.isEmpty == false) {
       var iten = itens.first;
 
       if (iten == null) {
-            return fetchEnterprise(newCNPJ);
+        return fetchEnterprise(newCNPJ);
       } else {
         return Enterprise(
             name: iten["name"],
@@ -63,11 +61,35 @@ class EnterpriseWorker {
             type: iten["type"],
             port: iten["port"],
             nature: iten["nature"],
-            porte: iten["porte"]
-        );
+            porte: iten["porte"]);
       }
     } else {
       return fetchEnterprise(newCNPJ);
-    }  
+    }
+  }
+
+  Future<List<Enterprise>> fetchAllEnterprisesFromDatabase() async {
+    var completer = new Completer<List<Enterprise>>();
+    var enterprises = List<Enterprise>();
+
+    Database db = await getDataFromDatabase();
+    List item = await db.query(tableName);
+
+    item.forEach((element) {
+      enterprises.add(
+        Enterprise(
+            name: element["name"],
+            cnpj: element["cnpj"],
+            nickName: element["nickName"],
+            fondationDate: element["fondationDate"],
+            type: element["type"],
+            port: element["port"],
+            nature: element["nature"],
+            porte: element["porte"])
+      );
+    });
+    
+    completer.complete(enterprises);
+    return completer.future;
   }
 }
